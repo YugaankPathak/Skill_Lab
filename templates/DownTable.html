@@ -1,0 +1,11 @@
+{%extends "layout.html"%}
+{%block content%}
+<h2>{{ text }}</h2>
+<ul>
+  {{summary}} </br> </br>
+  {% for file in files %}
+  <li><a href="{{ url_for('serve_file', filename=file) }}">{{ file }}</a></li>
+  {% endfor %}
+</ul>
+{%endblock content%}
+<!--download="file"-->
