@@ -5,6 +5,7 @@ import toPDF
 import table
 import API
 import to_csv
+import pandas as pd
 
 #Initializing the app variable
 app= Flask(__name__)
@@ -81,13 +82,26 @@ def download(summy):
     return render_template('Download.html',title='Summarizer-Download',text="Summary", summary=to_csv.process(summy),files=files)
 
 #Download page for summary
-@app.route('/downloadTable', methods=['POST','Get'])
+@app.route('/downloadTable', methods=['POST','GET'])
 def downloadTable(summary):
     flash('Extraction Complete','success')
     files = os.listdir(app.config['TABLE_FOLDER'])
+    csv_tables = {}
+
     if not files:
         summary="Sorry, No Tables Found!"
-    return render_template('DownTable.html',title='Table-Download',text="Table(s)", summary=summary, files=files)
+
+    else:
+        csv_files = [f for f in os.listdir(Table_Folder)]
+       
+        # Loop through each CSV file, read it, and convert to HTML
+        for csv_file in csv_files:
+            file_path = os.path.join(Table_Folder, csv_file)
+            df = pd.read_csv(file_path)  # Read CSV into DataFrame
+            df.fillna('', inplace=True) 
+            csv_tables[csv_file] = df.to_html(classes='table table-striped')  # Convert DataFrame to HTML
+   
+    return render_template('DownTable.html',title='Table-Download',text="Table(s)", summary=summary, files=files, csv_tables=csv_tables)
 
 #helper to the summarizer function, extracts text
 def extract_text_from_pdf(pdf_path):
