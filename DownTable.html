@@ -1,0 +1,19 @@
+{%extends "layout.html"%}
+{%block content%}
+<div class="container">
+  <h2>{{ text }}</h2>
+  {% for filename, table in csv_tables.items() %}
+      <h3>{{ filename }}</h3>
+      {{ table|safe }}  <!-- Display the table -->
+  {% endfor %}
+</div>
+<div class="container">
+<ul>
+  {{summary}} </br> </br>
+  {% for file in files %}
+  <li><a href="{{ url_for('serve_file', filename=file) }}">{{ file }}</a></li>
+  {% endfor %}
+</ul>
+</div>
+{%endblock content%}
+<!--download="file"-->

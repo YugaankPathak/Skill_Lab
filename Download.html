@@ -1,0 +1,19 @@
+{%extends "layout.html"%}
+{%block content%}
+<style>
+  /* CSS text wrapping */
+  .wrapped-text {
+      white-space: pre-wrap; /* Preserves newlines and wraps long lines */
+      word-wrap: break-word; /* Breaks long words to wrap them */
+  }
+</style>
+<h2>{{ text }}</h2>
+<ul>
+  <div class="wrapped-text">{{ summary }}</div> </br> </br>
+  {% for file in files %}
+  {% if file.endswith('.csv') or file.endswith('.pdf') %}
+      <li><a href="{{ url_for('uploaded_file', filename=file) }}">{{ file }}</a></li>
+    {% endif %}
+  {% endfor %}
+</ul>
+{%endblock content%}
